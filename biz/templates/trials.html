@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+        <header class="header">
+            <h1 class="title">MicroBiz Reality Check Agent</h1>
+            <p class="subtitle">Test your business idea with numbers before spending money.</p>
+        </header>
+
+        <form id="reality-check-form" class="form" novalidate>
+            <div class="form-group">
+                <label for="business_type" class="label">Business Type</label>
+                <input 
+                    type="text" 
+                    id="business_type" 
+                    name="business_type" 
+                    class="input" 
+                    placeholder="e.g., Coffee shop, Online tutoring, Food truck"
+                    required
+                >
+                <span class="error-message" id="business_type_error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="location" class="label">Location</label>
+                <input 
+                    type="text" 
+                    id="location" 
+                    name="location" 
+                    class="input" 
+                    placeholder="e.g., Downtown Seattle, WA"
+                    required
+                >
+                <span class="error-message" id="location_error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="startup_budget" class="label">Startup Budget </label>
+                <input 
+                    type="number" 
+                    id="startup_budget" 
+                    name="startup_budget" 
+                    class="input" 
+                    placeholder="e.g., 10000.00 (startup capital)"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+                <span class="error-message" id="startup_budget_error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="monthly_sales_volume" class="label">Expected Monthly Sales Volume </label>
+                <input 
+                    type="number" 
+                    id="monthly_sales_volume" 
+                    name="monthly_sales_volume" 
+                    class="input" 
+                    placeholder="e.g., 5000.00 (monthly revenue)"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+                <span class="error-message" id="monthly_sales_volume_error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="fixed_cost" class="label">Fixed Cost</label>
+                <input 
+                    type="number" 
+                    id="fixed_cost" 
+                    name="fixed_costs" 
+                    class="input" 
+                    placeholder="e.g., 2000.00 (monthly fixed costs)"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+                <span class="error-message" id="fixed_cost_error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="variable_cost" class="label">Variable Cost</label>
+                <input 
+                    type="number" 
+                    id="variable_cost" 
+                    name="variable_costs" 
+                    class="input" 
+                    placeholder="e.g., 1500.00 (monthly variable costs)"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+                <span class="error-message" id="variable_cost_error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="cost_per_unit" class="label">Cost per Unit</label>
+                <input 
+                    type="number" 
+                    id="cost_per_unit" 
+                    name="cost_per_unit" 
+                    class="input" 
+                    placeholder="e.g., 2.50 (cost per unit)"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+                <span class="error-message" id="cost_per_unit_error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="target_selling_price" class="label">Target Selling Price</label>
+                <input 
+                    type="number" 
+                    id="target_selling_price" 
+                    name="target_selling_price" 
+                    class="input" 
+                    placeholder="e.g., 5.00 (selling price per unit)"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+                <span class="error-message" id="target_selling_price_error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="time_horizon" class="label">Time Horizon</label>
+                <input 
+                    type="text" 
+                    id="time_horizon" 
+                    name="time_horizon" 
+                    class="input" 
+                    placeholder="e.g., 6 months, 1 year"
+                    required
+                >
+                <span class="error-message" id="time_horizon_error"></span>
+            </div>
+
+
+            <button type="submit" id="submit-btn" class="button" disabled>
+                <span class="button-text">Run Reality Check</span>
+                <span class="spinner hidden"></span>
+            </button>
+        </form>
+
+        <section id="results" class="results hidden">
+            <h2 class="results-title">Reality Check Results</h2>
+            
+            <div id="explanation" class="result-card">
+                <h3 class="result-card-title">Assessment</h3>
+                <div id="explanation-content" class="result-content"></div>
+            </div>
+
+            <div id="questions-section" class="result-card hidden">
+                <h3 class="result-card-title">Follow-up Questions</h3>
+                <ul id="questions-list" class="questions-list"></ul>
+            </div>
+
+            <div class="disclaimer">
+                <p id="disclaimer-text"></p>
+            </div>
+        </section>
+
+        <section id="error-section" class="error-section hidden">
+            <h2 class="error-title">Error</h2>
+            <ul id="error-list" class="error-list"></ul>
+        </section>
+
+        <footer class="footer">
+            <p>This tool provides decision support only. No financial guarantees.</p>
+        </footer>
+    </main>
+{% endblock %}
+
