@@ -34,109 +34,134 @@
             </div>
 
             <div class="form-group">
-                <label for="startup_budget" class="label">Startup Budget </label>
+                <label for="C_start" class="label">Startup Capital </label>
                 <input 
                     type="number" 
-                    id="startup_budget" 
-                    name="startup_budget" 
+                    id="C_start" 
+                    name="C_start" 
                     class="input" 
                     placeholder="e.g., 10000.00 (startup capital)"
                     min="0"
                     step="0.01"
                     required
                 >
-                <span class="error-message" id="startup_budget_error"></span>
+                <span class="error-message" id="C_start_error"></span>
             </div>
 
             <div class="form-group">
-                <label for="monthly_sales_volume" class="label">Expected Monthly Sales Volume </label>
+                <label for="T" class="label">Time(months) </label>
                 <input 
                     type="number" 
-                    id="monthly_sales_volume" 
-                    name="monthly_sales_volume" 
+                    id="T" 
+                    name="T" 
                     class="input" 
-                    placeholder="e.g., 5000.00 (monthly revenue)"
+                    placeholder="e.g., 6 months"
+                    min="0"
+                    step="1"
+                    required
+                >
+                <span class="error-message" id="T_error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="P" class="label">Target Selling Price</label>
+                <input 
+                    type="number" 
+                    id="P" 
+                    name="P" 
+                    class="input" 
+                    placeholder="e.g., 2000.00"
                     min="0"
                     step="0.01"
                     required
                 >
-                <span class="error-message" id="monthly_sales_volume_error"></span>
+                <span class="error-message" id="P_error"></span>
             </div>
 
             <div class="form-group">
-                <label for="fixed_cost" class="label">Fixed Cost</label>
+                <label for="Q" class="label">Monthly sales volume</label>
                 <input 
                     type="number" 
-                    id="fixed_cost" 
-                    name="fixed_costs" 
+                    id="Q" 
+                    name="Q" 
                     class="input" 
-                    placeholder="e.g., 2000.00 (monthly fixed costs)"
+                    placeholder="e.g., 1500.00 (monthly estimated items sold)"
+                    min="0"
+                    step="1"
+                    required
+                >
+                <span class="error-message" id="Q_error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="g" class="label">Growth Rate Per Month</label>
+                <input 
+                    type="number" 
+                    id="g" 
+                    name="g" 
+                    class="input" 
+                    placeholder="e.g., 2 (percentage growth rate per month)"
+                    min="0"
+                    step="1"
+                    required
+                >
+                <span class="error-message" id="g_error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="E_fix" class="label">Fixed costs</label>
+                <input 
+                    type="number" 
+                    id="E_fix" 
+                    name="E_fix" 
+                    class="input" 
+                    placeholder="e.g., 40000"
                     min="0"
                     step="0.01"
                     required
                 >
-                <span class="error-message" id="fixed_cost_error"></span>
+                <span class="error-message" id="E_fix_error"></span>
             </div>
 
             <div class="form-group">
-                <label for="variable_cost" class="label">Variable Cost</label>
+                <label for="E_var" class="label">Variable costs</label>
                 <input 
                     type="number" 
-                    id="variable_cost" 
-                    name="variable_costs" 
+                    id="E_var" 
+                    name="E_var" 
                     class="input" 
-                    placeholder="e.g., 1500.00 (monthly variable costs)"
-                    min="0"
-                    step="0.01"
+                    placeholder="e.g., 50000"
                     required
                 >
-                <span class="error-message" id="variable_cost_error"></span>
+                <span class="error-message" id="E_var_error"></span>
             </div>
 
             <div class="form-group">
-                <label for="cost_per_unit" class="label">Cost per Unit</label>
+                <label for="C_startup" class="label">Start up capital</label>
                 <input 
                     type="number" 
-                    id="cost_per_unit" 
-                    name="cost_per_unit" 
+                    id="C_startup" 
+                    name="C_startup" 
                     class="input" 
-                    placeholder="e.g., 2.50 (cost per unit)"
-                    min="0"
-                    step="0.01"
+                    placeholder="e.g., 45000"
                     required
                 >
-                <span class="error-message" id="cost_per_unit_error"></span>
+                <span class="error-message" id="C_startup_error"></span>
             </div>
-
+            
             <div class="form-group">
-                <label for="target_selling_price" class="label">Target Selling Price</label>
+                <label for="initial_inventory_units" class="label">Initial Inventory</label>
                 <input 
                     type="number" 
-                    id="target_selling_price" 
-                    name="target_selling_price" 
+                    id="initial_inventory_units" 
+                    name="initial_inventory_units" 
                     class="input" 
-                    placeholder="e.g., 5.00 (selling price per unit)"
-                    min="0"
-                    step="0.01"
+                    placeholder="e.g., 200 units"
                     required
                 >
-                <span class="error-message" id="target_selling_price_error"></span>
+                <span class="error-message" id="initial_inventory_units_error"></span>
             </div>
-
-            <div class="form-group">
-                <label for="time_horizon" class="label">Time Horizon</label>
-                <input 
-                    type="text" 
-                    id="time_horizon" 
-                    name="time_horizon" 
-                    class="input" 
-                    placeholder="e.g., 6 months, 1 year"
-                    required
-                >
-                <span class="error-message" id="time_horizon_error"></span>
-            </div>
-
-
+            
             <button type="submit" id="submit-btn" class="button" disabled>
                 <span class="button-text">Run Reality Check</span>
                 <span class="spinner hidden"></span>
@@ -165,6 +190,5 @@
             <h2 class="error-title">Error</h2>
             <ul id="error-list" class="error-list"></ul>
         </section>
-    </main>
 {% endblock %}
 

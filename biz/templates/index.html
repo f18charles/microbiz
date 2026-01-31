@@ -14,7 +14,7 @@
         <!-- CENTER IMAGE -->
         <div class="hero-center">
             <div class="circle">
-                <img src="{%static 'images/'%}" alt="My Business Area">
+                <img src="{%static 'images/photo1.jpg'%}" alt="My Business Area">
             </div>
         </div>
 
@@ -25,7 +25,7 @@
                 <span id="swap-word">RIGHT</span><br>
                 BUSINESS
             </h1>
-            <a href="signup.html">
+            <a href="{% url 'trials' %}">
                 <button class="apply-btn">Try Now</button>
             </a>
             
@@ -39,36 +39,5 @@
     <section class="message-section">
         <p id="typed-text"></p>
     </section>
-    <footer class="footer">
-    <div class="footer-container">
-
-        <!-- Brand / About -->
-        <div class="footer-section">
-            <h3 class="footer-logo">MicroBiz Reality Check</h3>
-            <p>
-                Helping entrepreneurs make smarter business decisions through
-                clear insights, data, and AI-powered guidance.
-            </p>
-        </div>
-
-        <!-- Links -->
-        <div class="footer-section">
-            <h4>Product</h4>
-            <ul>
-                <li><a href="#">How it works</a></li>
-                <li><a href="#">Features</a></li>
-                <li><a href="#">Try Now</a></li>
-            </ul>
-        </div>
-
-        <div class="footer-section">
-            <h4>Company</h4>
-            <ul>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
-                <li><a href="#">Privacy Policy</a></li>
-            </ul>
-        </div>
-
-    </div>
+    
 {% endblock %}

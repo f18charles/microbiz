@@ -1,25 +1,5 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>dashboard</title>
-        <link rel="stylesheet" href="./styles/header.css"/>
-        <link rel="stylesheet" href="./styles/dash.css">
-        <link rel="stylesheet" href="./styles/footer.css">
-    </head>
-    <body>
-         <div class="header">
-            <div class="leftheader">
-                <img class="profile pic" src="./images/user.jpeg">
-                <div>Hello User</div>
-            </div>
-            <div class="rightheader">
-                 <a class="links" href="index.html">
-                    <button class="buttons log-in">
-                        Home
-                    </button>
-                </a>
-            </div>
-        </div> 
+{% extends 'base.html' %}
+{% block content %}
         <div class="div-container">
             <div class="outer-box">
                 <div class="second-row">
@@ -28,7 +8,7 @@
                 </div>
                 <div class="third-row">
 
-                    <a class="links" href="test.html">
+                    <a class="links" href="{% url 'trials'%}">
                         <button class="buttons">
                             Start 
                         </button>
@@ -36,43 +16,4 @@
                 </div>
             </div>
         </div>
-        <footer class="footer">
-    <div class="footer-container">
-
-        <!-- Brand / About -->
-        <div class="footer-section">
-            <h3 class="footer-logo">MicroBiz Reality Check</h3>
-            <p>
-                Helping entrepreneurs make smarter business decisions through
-                clear insights, data, and AI-powered guidance.
-            </p>
-        </div>
-
-        <!-- Links -->
-        <div class="footer-section">
-            <h4>Product</h4>
-            <ul>
-                <li><a href="#">How it works</a></li>
-                <li><a href="#">Features</a></li>
-                <li><a href="#">Try Now</a></li>
-            </ul>
-        </div>
-
-        <div class="footer-section">
-            <h4>Company</h4>
-            <ul>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
-                <li><a href="#">Privacy Policy</a></li>
-            </ul>
-        </div>
-
-    </div>
-
-    <div class="footer-bottom">
-        <p>© 2026 MicroBiz Reality Check. All rights reserved.</p>
-    </div>
-</footer>
-        
-    </body>
-</html>
+       {% endblock%}

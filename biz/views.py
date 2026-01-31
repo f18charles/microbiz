@@ -17,6 +17,28 @@ def index(request):
     """Render the main page."""
     return render(request, 'index.html')
 
+def dash(request):
+    """Render the main page."""
+    return render(request, 'dash.html')
+
+def login(request):
+    """Render the main page."""
+    return render(request, 'login.html')
+
+def signup(request):
+    """Render the main page."""
+    return render(request, 'signup.html')
+
+def trials(request):
+    """Render the main page."""
+    return render(request, 'trials.html')
+
+def test(request):
+    """Render the main page."""
+    return render(request, 'test.html')
+
+
+
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -113,12 +135,12 @@ def analyze(request):
             time_horizon = form.cleaned_data['T']
             target_selling_price = form.cleaned_data['P']
             monthly_sales_volume = form.cleaned_data['Q']
+            expected_growth_rate = form.cleaned_data['g']
             fixed_costs = form.cleaned_data['E_fix']
             variable_costs = form.cleaned_data['E_var']
             start_up_capital = form.cleaned_data['C_startup']  # Assuming startup costs as cost per unit for this context
             initial_inventory_units = form.cleaned_data['initial_inventory_units']  # Assuming expected sales volume is same as monthly sales volume
-            marketing_budget = form.cleaned_data['monthly_sales_volume']  # Assuming units sold is same as monthly sales volume
-        
+            
         else:
             return JsonResponse({'success': False, 'errors': form.errors}, status=400)
         
@@ -151,7 +173,7 @@ def analyze(request):
 # - End with 2-3 clarifying questions if relevant
 # """
 
-        user_prompt = prompt_user(business_type,location,capital,monthly_sales_volume,fixed_costs,variable_costs,start_up_capital,target_selling_price,initial_inventory_units,time_horizon,marketing_budget)
+        user_prompt = prompt_user(expected_growth_rate,business_type,location,capital,monthly_sales_volume,fixed_costs,variable_costs,start_up_capital,target_selling_price,initial_inventory_units,time_horizon,marketing_budget)
 
         # Call Groq API via your utility function
         ai_response_raw = get_groq_completion(

@@ -64,7 +64,7 @@ This analysis is decision support only and not professional financial advice."""
 
 
 
-def prompt_user(business_type: str, location: str, C_start: float, T: int, P: float, Q: int, E_fix: float, E_var: float,C_startup: float, initial_inventory_units: int, monthly_sales_volume: int,marketing_budget:float) -> str:
+def prompt_user(g: int, business_type: str, location: str, C_start: float, T: int, P: float, Q: int, E_fix: float, E_var: float,C_startup: float, initial_inventory_units: int, monthly_sales_volume: int,marketing_budget:float) -> str:
     totalCosts = total_costs(E_fix,Q,E_var,marketing_budget)
     grossBurn = gross_burn(totalCosts)
     Revenue = revenue(Q, P)
@@ -76,11 +76,11 @@ def prompt_user(business_type: str, location: str, C_start: float, T: int, P: fl
         time_horizon = {T:,.2f}
         target_selling_price = {P}
         monthly_sales_volume = {Q}
+        expected_growth_rate = {g}
         fixed_costs = {E_fix:,.2f}
         variable_costs = {E_var:,.2f}
         start_up_capital = {C_startup:,.2f}  
         initial_inventory_units = {initial_inventory_units}
-        marketing_budget = {monthly_sales_volume:,.2f}
     
         
         Heres more details on the that the system ran. Put them into consideration when giving the final assessment:
