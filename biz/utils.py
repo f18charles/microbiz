@@ -43,6 +43,38 @@ def get_groq_completion(prompt: str, system_prompt: Optional[str] = None, api_ke
 import math
 
 
+
+def startupCosts(capital: float, unit_cost: float, startup_units: int, contingency_fund: float) -> float:
+    """
+    Calculate total startup costs.
+    preopening expenses(the capital)
+    """
+    return capital + (unit_cost * startup_units)  + contingency_fund
+
+def breakEvenAnalysis(fixe_expenses: float, cost_per_unit: float, target_selling_price: float) -> Optional[int]:
+    """
+    Calculate break-even point in units.
+    Returns None if break-even is not achievable.
+    """
+    
+    # Basic validation
+    if fixe_expenses < 0 or target_selling_price < 0 or cost_per_unit < 0:
+        return None
+
+    contribution_margin = target_selling_price - cost_per_unit
+
+    # If margin is zero or negative, break-even is impossible
+    if contribution_margin <= 0:
+        return None
+
+    return math.ceil(fixe_expenses / contribution_margin)
+
+def cashFlowProjection(capital: float, monthly_revenue: float, monthly_expenses: float, months: int) -> float:
+    """
+    Calculate projected cash flow after a given number of months.
+    """
+    return capital + (monthly_revenue - monthly_expenses) * months
+
 def revenueCalculation(price: float, quantity: int) -> float:
     """
     Calculate total revenue.
@@ -50,14 +82,27 @@ def revenueCalculation(price: float, quantity: int) -> float:
     """
     return price * quantity
 
+def profitMargin(price: float, quantity: int,expenses: float) -> float:
+    """
+    Calculate profit margin percentage.
+    """
+    revenue = revenueCalculation(price,quantity)
+    if revenue <= 0:
+        return 0.0
+    return ((revenue - expenses) / revenue) * 100
 
-def costBreakdown(fixed_costs: float, variable_costs: float) -> float:
+def monthlyBurn(fixe_expenses: float, variable_expenses: float) -> float:
     """
     Calculate total costs.
     Assumes both values are for the same period.
     """
-    return fixed_costs + variable_costs
+    return fixe_expenses + variable_expenses
 
+def netBurn(price: float, quantity: float, fixe_expenses: float, variable_expenses: float) -> float:
+    """
+    Calculate net burn after a given number of months.
+    """
+    return monthlyBurn(fixe_expenses,variable_expenses) - revenueCalculation(price,quantity)
 
 def grossNetMargin(revenue: float, costs: float) -> float:
     """
@@ -67,38 +112,37 @@ def grossNetMargin(revenue: float, costs: float) -> float:
         return 0.0
     return ((revenue - costs) / revenue) * 100
 
+def cashRunway(capital: float, price: float, quantity: int, fixe_expenses: float, variable_expenses: float) -> int:
+    """
+    Calculate cash runway in months.
+    """
+    netburn = netBurn(price, quantity, fixe_expenses, variable_expenses)
+    if netBurn <= 0:
+        raise ValueError("Monthly burn rate must be greater than zero.")
+
+    return math.floor(capital / netBurn)
+
 
 from typing import Optional
 
-def breakEvenPoint(
-    fixed_costs: float,
-    price_per_unit: float,
-    variable_cost_per_unit: float
-) -> Optional[int]:
+def breakEvenPoint(fixe_expenses: float,price_per_unit: float,cost_per_unit: float) -> Optional[int]:
     """
     Calculate break-even point in units.
     Returns None if break-even is not achievable.
     """
 
     # Basic validation
-    if fixed_costs < 0 or price_per_unit < 0 or variable_cost_per_unit < 0:
+    if fixe_expenses < 0 or price_per_unit < 0 or cost_per_unit < 0:
         return None
 
-    contribution_margin = price_per_unit - variable_cost_per_unit
+    contribution_margin = price_per_unit - cost_per_unit
 
     # If margin is zero or negative, break-even is impossible
     if contribution_margin <= 0:
         return None
 
-    return math.ceil(fixed_costs / contribution_margin)
+    return math.ceil(fixe_expenses / contribution_margin)
 
 
 
-def cashRunway(cash_on_hand: float, monthly_burn_rate: float) -> int:
-    """
-    Calculate cash runway in months.
-    """
-    if monthly_burn_rate <= 0:
-        raise ValueError("Monthly burn rate must be greater than zero.")
 
-    return math.floor(cash_on_hand / monthly_burn_rate)
