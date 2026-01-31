@@ -1,30 +1,6 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Home</title>
-        <link rel="stylesheet" href="./styles/styles.css" />
-        <link rel="stylesheet" href="./styles/header.css"/>
-        <link rel="stylesheet" href="./styles/home.css"/>
-        <link rel="stylesheet" href="./styles/footer.css"/>
-    </head>
-    <body>
-        <div class="header">
-            <div class="leftheader">
-                
-            </div>
-            <div class="rightheader">
-                <a class="links" href="signup.html">
-                    <button class="buttons sign-up">
-                        Sign Up
-                    </button>
-                </a>
-                <a class="links" href="login.html">
-                    <button class="buttons log-in">
-                        Log in
-                    </button>
-                </a>
-            </div>
-        </div>
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
         <section class="hero">
 
         <!-- LEFT TEXT -->
@@ -38,7 +14,7 @@
         <!-- CENTER IMAGE -->
         <div class="hero-center">
             <div class="circle">
-                <img src="my-new-picture.jpg" alt="My Business Area">
+                <img src="{%static 'images/'%}" alt="My Business Area">
             </div>
         </div>
 
@@ -95,11 +71,4 @@
         </div>
 
     </div>
-
-    <div class="footer-bottom">
-        <p>© 2026 MicroBiz Reality Check. All rights reserved.</p>
-    </div>
-</footer>
-
-    </body>
-</html>
+{% endblock %}
