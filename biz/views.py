@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.conf import settings
+from .forms import RealityCheckForm
 from .utils import get_groq_completion  # Your Groq API utility function
 from .prompt import prompt_system, prompt_user  # Importing the system prompt
 
@@ -27,49 +28,101 @@ def analyze(request):
         # Parse JSON body
         data = json.loads(request.body)
 
-        # Validate required fields
-        business_type = data.get('business_type', '').strip()
-        location = data.get('location', '').strip()
-        startup_budget = data.get('startup_budget')
-        # Accept either backend keys (fixed_costs/variable_costs) or older names (fixed_cost/variable_cost)
-        _fixed = data.get('fixed_costs', data.get('fixed_cost', ''))
-        if isinstance(_fixed, str):
-            fixed_costs = _fixed.strip()
+        """
+        inputs
+        1. Capital and time
+        C_start - starting capital
+        T - time horizon for analysis (months)
+        
+        2. Pricing and sales
+        P - unit selling price
+        Q - expected sales volume (units per month)
+        g - growth rate(optional) per month
+        
+        3. Costs
+        E_var - variable expenses 
+        E_fix - fixed expenses
+        C_startup- one-time startup costs (equipment, licenses, initial inventory)
+        - initial inventory (units)
+        - contingency fund (% of capital)
+        
+        4. customers and marketing(optional but helpful)
+        - target no. of customers(monthly)
+        - marketing budget (monthly)
+        
+        other
+        business type
+        location
+        """
+
+
+
+        # # Validate required fields
+        # business_type = data.get('business_type', '').strip()
+        # location = data.get('location', '').strip()
+        
+        # capital = data.get('capital')
+        # # Accept either backend keys (fixed_costs/variable_costs) or older names (fixed_cost/variable_cost)
+        # _fixed = data.get('fixed_costs', data.get('fixed_cost', ''))
+        # if isinstance(_fixed, str):
+        #     fixed_costs = _fixed.strip()
+        # else:
+        #     fixed_costs = _fixed
+
+        # _variable = data.get('variable_costs', data.get('variable_cost', ''))
+        # if isinstance(_variable, str):
+        #     variable_costs = _variable.strip()
+        # else:
+        #     variable_costs = _variable
+        # monthly_sales_volume = data.get('monthly_sales_volume')
+        # _units = data.get('units', '')
+        # units = _units.strip() if isinstance(_units, str) else _units
+        # # Numeric/text fields: tolerate numbers or strings
+        # _cpu = data.get('cost_per_unit', '')
+        # cost_per_unit = _cpu.strip() if isinstance(_cpu, str) else _cpu
+
+        # _tsp = data.get('target_selling_price', '')
+        # target_selling_price = _tsp.strip() if isinstance(_tsp, str) else _tsp
+
+        # _expected = data.get('expected_sales_volume', '')
+        # expected_sales_volume = _expected.strip() if isinstance(_expected, str) else _expected
+
+        # _th = data.get('time_horizon', '6')
+        # time_horizon = _th.strip() if isinstance(_th, str) else _th
+
+        # errors = []
+        # if not business_type:
+        #     errors.append("Business type is required.")
+        # if not location:
+        #     errors.append("Location is required.")
+        # if not capital or float(capital) <= 0:
+        #     errors.append("Startup budget must be greater than zero.")
+        # if not monthly_sales_volume or float(monthly_sales_volume) <= 0:
+        #     errors.append("Expected monthly sales volume must be greater than zero.")
+
+        # if errors:
+        #     return JsonResponse({'success': False, 'errors': errors}, status=400)
+
+
+        form = RealityCheckForm(data)
+        
+        if form.is_valid():
+            business_type = form.cleaned_data['business_type']
+            location = form.cleaned_data['location']
+            capital = form.cleaned_data['C_start']
+            time_horizon = form.cleaned_data['T']
+            target_selling_price = form.cleaned_data['P']
+            monthly_sales_volume = form.cleaned_data['Q']
+            fixed_costs = form.cleaned_data['E_fix']
+            variable_costs = form.cleaned_data['E_var']
+            start_up_capital = form.cleaned_data['C_startup']  # Assuming startup costs as cost per unit for this context
+            initial_inventory_units = form.cleaned_data['initial_inventory_units']  # Assuming expected sales volume is same as monthly sales volume
+            marketing_budget = form.cleaned_data['monthly_sales_volume']  # Assuming units sold is same as monthly sales volume
+        
         else:
-            fixed_costs = _fixed
-
-        _variable = data.get('variable_costs', data.get('variable_cost', ''))
-        if isinstance(_variable, str):
-            variable_costs = _variable.strip()
-        else:
-            variable_costs = _variable
-        monthly_sales_volume = data.get('monthly_sales_volume')
-        # Numeric/text fields: tolerate numbers or strings
-        _cpu = data.get('cost_per_unit', '')
-        cost_per_unit = _cpu.strip() if isinstance(_cpu, str) else _cpu
-
-        _tsp = data.get('target_selling_price', '')
-        target_selling_price = _tsp.strip() if isinstance(_tsp, str) else _tsp
-
-        _expected = data.get('expected_sales_volume', '')
-        expected_sales_volume = _expected.strip() if isinstance(_expected, str) else _expected
-
-        _th = data.get('time_horizon', '6 months')
-        time_horizon = _th.strip() if isinstance(_th, str) else _th
-
-        errors = []
-        if not business_type:
-            errors.append("Business type is required.")
-        if not location:
-            errors.append("Location is required.")
-        if not startup_budget or float(startup_budget) <= 0:
-            errors.append("Startup budget must be greater than zero.")
-        if not monthly_sales_volume or float(monthly_sales_volume) <= 0:
-            errors.append("Expected monthly sales volume must be greater than zero.")
-
-        if errors:
-            return JsonResponse({'success': False, 'errors': errors}, status=400)
-
+            return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+        
+        
         # Check Groq API key
         groq_api_key = settings.GROQ_API_KEY  # reuse env variable if you like
         if not groq_api_key:
@@ -98,7 +151,7 @@ def analyze(request):
 # - End with 2-3 clarifying questions if relevant
 # """
 
-        user_prompt = prompt_user(business_type,location,startup_budget,monthly_sales_volume,fixed_costs,variable_costs,cost_per_unit,target_selling_price,expected_sales_volume,time_horizon)
+        user_prompt = prompt_user(business_type,location,capital,monthly_sales_volume,fixed_costs,variable_costs,start_up_capital,target_selling_price,initial_inventory_units,time_horizon,marketing_budget)
 
         # Call Groq API via your utility function
         ai_response_raw = get_groq_completion(

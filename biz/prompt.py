@@ -43,25 +43,44 @@ This analysis is decision support only and not professional financial advice."""
 
 
 
-def prompt_user(business_type: str, location: str, startup_budget: float, monthly_sales_volume: float, fixed_costs: float, variable_cost: float,cost_per_unit: float,target_selling_price: float,expected_sales_volume: float,time_horizon: str) -> str:
+def prompt_user(business_type: str, location: str, C_start: float, T: int, P: float, Q: int, E_fix: float, E_var: float,C_startup: float, initial_inventory_units: int, monthly_sales_volume: int,marketing_budget:float) -> str:
+    totalCosts = total_costs(E_fix,Q,E_var,marketing_budget)
+    grossBurn = gross_burn(totalCosts)
+    Revenue = revenue(Q, P)
+    netBurn=net_burn(grossBurn, Revenue)
     return f"""Please analyze this micro-business idea in my local currency:
-        Business Type: {business_type}
-        Location: {location}
-        Startup Budget: {startup_budget:,.2f}
-        Expected Monthly Sales Volume: {monthly_sales_volume:,.2f}
-        Fixed Costs: {fixed_costs}
-        Variable Costs: {variable_cost}
-        Cost per Unit: {cost_per_unit}  
-        Target Selling Price: {target_selling_price}
-        Expected Sales Volume: {expected_sales_volume}
-        Time Horizon for Analysis: {time_horizon}
+        business_type = {business_type}
+        location = {location}
+        capital = {C_start:,.2f}
+        time_horizon = {T:,.2f}
+        target_selling_price = {P}
+        monthly_sales_volume = {Q}
+        fixed_costs = {E_fix:,.2f}
+        variable_costs = {E_var:,.2f}
+        start_up_capital = {C_startup:,.2f}  
+        initial_inventory_units = {initial_inventory_units}
+        marketing_budget = {monthly_sales_volume:,.2f}
+    
         
         Heres more details on the that the system ran. Put them into consideration when giving the final assessment:
-        {revenueCalculation(cost_per_unit, monthly_sales_volume)}
-        {costBreakdown(fixed_costs, variable_cost)}
-        {grossNetMargin(revenue=revenueCalculation(cost_per_unit, monthly_sales_volume), costs=costBreakdown(fixed_costs, variable_cost))}
-        {breakEvenPoint(fixed_costs, cost_per_unit, variable_cost)}
-        {cashRunway(fixed_costs, variable_cost)}
+        {Revenue}
+        {totalCosts}
+        {grossBurn}
+        {netBurn}
+        {runway(C_start, netBurn)}
+        {break_even_point(E_fix, P, E_var)}
+        {profit_margin(Revenue, totalCosts)}
+        {cash_flow_after_n_months(C_start, Revenue, totalCosts, T)}
+        
+        Then calculate the following and add to your assessment:
+        operating cash flow = Revenue - Total Costs + depreciation - taxes
+        free cash flow = operating cash flow - capital expenditures
+
+        ebitda = Revenue - C_fixed - C_variable
+        industry multiple = varies by industry, market conditions
+        enterprise value = ebitda x industry multiple
         
 
         Provide your reality check assessment."""
+        
+        
