@@ -10,32 +10,30 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Input elements
     const inputs = {
-        business_type: document.getElementById('business_type'),
-        location: document.getElementById('location'),
-        C_start: document.getElementById('C_start'),
-        T: document.getElementById('T'),
-        P: document.getElementById('P'),
-        Q: document.getElementById('Q'),
-        g: document.getElementById('g'),
-        E_fix: document.getElementById('E_fix'),
-        E_var: document.getElementById('E_var'),
-        C_startup: document.getElementById('C_startup'),
-        initial_inventory_units: document.getElementById('initial_inventory_units'),
+        business_type: document.getElementById('id_business_type'),
+        location: document.getElementById('id_location'),
+        C_start: document.getElementById('id_C_start'),
+        T: document.getElementById('id_T'),
+        P: document.getElementById('id_P'),
+        Q: document.getElementById('id_Q'),
+        g: document.getElementById('id_g'),
+        E_fix: document.getElementById('id_E_fix'),
+        E_var: document.getElementById('id_E_var'),
+        initial_inventory_units: document.getElementById('id_initial_inventory_units'),
     };
     
     // Error elements
     const errors = {
-        business_type: document.getElementById('business_type_error'),
-        location: document.getElementById('location_error'),
-        C_start: document.getElementById('startup_budget_error'),
-        T: document.getElementById('monthly_sales_volume_error'),
-        P: document.getElementById('fixed_cost_error'),
-        Q: document.getElementById('variable_cost_error'),
-        g: document.getElementById('cost_per_unit_error'),
-        E_fix: document.getElementById('target_selling_price_error'),
-        E_var: document.getElementById('time_horizon_error'),
-        C_startup: document.getElementById('time_horizon_error'),
-        initial_inventory_units: document.getElementById('time_horizon_error'),
+        business_type: document.getElementById('id_business_type_error'),
+        location: document.getElementById('id_location_error'),
+        C_start: document.getElementById('id_C_start_error'),
+        T: document.getElementById('id_T_error'),
+        P: document.getElementById('id_P_error'),
+        Q: document.getElementById('id_Q_error'),
+        g: document.getElementById('id_g_error'),
+        E_fix: document.getElementById('id_E_fix_error'),
+        E_var: document.getElementById('id_E_var_error'),
+        initial_inventory_units: document.getElementById('id_initial_inventory_units_error'),
     };
     
     // Results elements
@@ -60,7 +58,6 @@ document.addEventListener('DOMContentLoaded', function() {
         g: false,
         E_fix: false,
         E_var: false,
-        C_startup: false,
         initial_inventory_units: false
     };
     
@@ -92,22 +89,22 @@ document.addEventListener('DOMContentLoaded', function() {
             case 'T':
                 const sales = parseFloat(value);
                 isValid = !isNaN(sales) && sales > 0;
-                errorMessage = isValid ? '' : 'Expected monthly sales must be greater than zero.';
+                errorMessage = isValid ? '' : 'Time horizon must be greater than zero.';
                 break;
             case 'P':
                 const fixed = parseFloat(value);
                 isValid = !isNaN(fixed) && fixed >= 0;
-                errorMessage = isValid ? '' : 'Fixed cost must be 0 or greater.';
+                errorMessage = isValid ? '' : 'The selling price must be 0 or greater.';
                 break;
             case 'Q':
                 const variable = parseFloat(value);
                 isValid = !isNaN(variable) && variable >= 0;
-                errorMessage = isValid ? '' : 'Variable cost must be 0 or greater.';
+                errorMessage = isValid ? '' : 'Quantity must be 0 or greater.';
                 break;
             case 'g':
                 const cpu = parseFloat(value);
                 isValid = !isNaN(cpu) && cpu >= 0;
-                errorMessage = isValid ? '' : 'Cost per unit must be 0 or greater.';
+                errorMessage = isValid ? '' : 'Growth rate per unit must be 0 or greater.';
                 break;
             case 'E_fix':
                 const tsp = parseFloat(value);
@@ -115,12 +112,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 errorMessage = isValid ? '' : 'Target selling price must be 0 or greater.';
                 break;
             case 'E_var':
-                isValid = value.length > 0;
-                errorMessage = isValid ? '' : 'Time horizon is required.';
-                break;
-            case 'C_startup':
-                isValid = value.length > 0;
-                errorMessage = isValid ? '' : 'Time horizon is required.';
+                const variable_e = parseFloat(value);
+                isValid = !isNaN(variable_e) && variable_e >= 0;
+                errorMessage = isValid ? '' : 'Variable expenses is required.';
                 break;
             case 'initial_inventory_units':
                 isValid = value.length > 0;
@@ -128,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             case 'monthly_sales_volume':
                 isValid = value.length > 0;
-                errorMessage = isValid ? '' : 'Time horizon is required.';
+                errorMessage = isValid ? '' : 'Monnthly sales volume is required.';
                 break;
             
         }
@@ -243,6 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
      * Handle form submission
      */
     async function handleSubmit(e) {
+        console.log('SUBMIT FIRED')
         e.preventDefault();
         
         // Validate all fields first
@@ -262,8 +257,7 @@ document.addEventListener('DOMContentLoaded', function() {
             Q: parseFloat(inputs.Q.value),
             g: parseFloat(inputs.g.value),
             E_fix: parseFloat(inputs.E_fix.value),
-            E_var: '',
-            C_startup: inputs.C_startup.value.trim(),
+            E_var: parseFloat(inputs.E_var.value),
             initial_inventory_units: inputs.initial_inventory_units.value.trim()
         };
         

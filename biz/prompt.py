@@ -16,9 +16,7 @@ inputs provided by the client are::
  - monthly_sales_volume
  - fixed_costs
  - variable_costs
- - start_up_capital
  - initial_inventory_units
- - marketing_budget
 
 **Context Provided by System:**
 The system has already calculated the following for you:
@@ -64,8 +62,19 @@ This analysis is decision support only and not professional financial advice."""
 
 
 
-def prompt_user(g: int, business_type: str, location: str, C_start: float, T: int, P: float, Q: int, E_fix: float, E_var: float,C_startup: float, initial_inventory_units: int, monthly_sales_volume: int,marketing_budget:float) -> str:
-    totalCosts = total_costs(E_fix,Q,E_var,marketing_budget)
+def prompt_user(
+   g: int, 
+   business_type: str, 
+   location: str, 
+   C_start: float, 
+   T: int, 
+   P: float, 
+   Q: int, 
+   E_fix: float, 
+   E_var: float, 
+   initial_inventory_units: int
+   ) -> str:
+    totalCosts = total_costs(E_fix,Q,E_var)
     grossBurn = gross_burn(totalCosts)
     Revenue = revenue(Q, P)
     netBurn=net_burn(grossBurn, Revenue)
@@ -73,25 +82,24 @@ def prompt_user(g: int, business_type: str, location: str, C_start: float, T: in
         business_type = {business_type}
         location = {location}
         capital = {C_start:,.2f}
-        time_horizon = {T:,.2f}
-        target_selling_price = {P}
+        time_horizon = {T}
+        target_selling_price = {P:,.2f}
         monthly_sales_volume = {Q}
         expected_growth_rate = {g}
         fixed_costs = {E_fix:,.2f}
         variable_costs = {E_var:,.2f}
-        start_up_capital = {C_startup:,.2f}  
-        initial_inventory_units = {initial_inventory_units}
-    
+        initial_inventory_units = {initial_inventory_units}    
         
         Heres more details on the that the system ran. Put them into consideration when giving the final assessment:
-        {Revenue}
-        {totalCosts}
-        {grossBurn}
-        {netBurn}
-        {runway(C_start, netBurn)}
-        {break_even_point(E_fix, P, E_var)}
-        {profit_margin(Revenue, totalCosts)}
-        {cash_flow_after_n_months(C_start, Revenue, totalCosts, T)}
+        
+        Revenue = {Revenue}
+        Total Costs = {totalCosts}
+        Gross Burn = {grossBurn}
+        Net Burn = {netBurn}
+        Runway = {runway(C_start, netBurn)}
+        Break Even Point = {break_even_point(E_fix, P, E_var)}
+        Profit Margin % = {profit_margin(Revenue, totalCosts)}
+        Cash Flow after {T} months = {cash_flow_after_n_months(C_start, Revenue, totalCosts, T)}
         
         Then calculate the following and add to your assessment:
         operating cash flow = Revenue - Total Costs + depreciation - taxes

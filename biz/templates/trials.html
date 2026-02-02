@@ -7,37 +7,38 @@
         </header>
 
         <form id="reality-check-form" class="form" novalidate>
+            {% comment %} {% csrf_token %}            {% endcomment %}
             <div class="form-group">
-                <label for="business_type" class="label">Business Type</label>
+                <label for="id_business_type" class="label">Business Type</label>
                 <input 
                     type="text" 
-                    id="business_type" 
+                    id="id_business_type" 
                     name="business_type" 
                     class="input" 
                     placeholder="e.g., Coffee shop, Online tutoring, Food truck"
                     required
                 >
-                <span class="error-message" id="business_type_error"></span>
+                <span class="error-message" id="id_business_type_error"></span>
             </div>
 
             <div class="form-group">
                 <label for="location" class="label">Location</label>
                 <input 
                     type="text" 
-                    id="location" 
+                    id="id_location" 
                     name="location" 
                     class="input" 
                     placeholder="e.g., Downtown Seattle, WA"
                     required
                 >
-                <span class="error-message" id="location_error"></span>
+                <span class="error-message" id="id_location_error"></span>
             </div>
 
             <div class="form-group">
                 <label for="C_start" class="label">Startup Capital </label>
                 <input 
                     type="number" 
-                    id="C_start" 
+                    id="id_C_start" 
                     name="C_start" 
                     class="input" 
                     placeholder="e.g., 10000.00 (startup capital)"
@@ -45,14 +46,14 @@
                     step="0.01"
                     required
                 >
-                <span class="error-message" id="C_start_error"></span>
+                <span class="error-message" id="id_C_start_error"></span>
             </div>
 
             <div class="form-group">
                 <label for="T" class="label">Time(months) </label>
                 <input 
                     type="number" 
-                    id="T" 
+                    id="id_T" 
                     name="T" 
                     class="input" 
                     placeholder="e.g., 6 months"
@@ -60,14 +61,14 @@
                     step="1"
                     required
                 >
-                <span class="error-message" id="T_error"></span>
+                <span class="error-message" id="id_T_error"></span>
             </div>
 
             <div class="form-group">
                 <label for="P" class="label">Target Selling Price</label>
                 <input 
                     type="number" 
-                    id="P" 
+                    id="id_P" 
                     name="P" 
                     class="input" 
                     placeholder="e.g., 2000.00"
@@ -75,14 +76,14 @@
                     step="0.01"
                     required
                 >
-                <span class="error-message" id="P_error"></span>
+                <span class="error-message" id="id_P_error"></span>
             </div>
 
             <div class="form-group">
                 <label for="Q" class="label">Monthly sales volume</label>
                 <input 
                     type="number" 
-                    id="Q" 
+                    id="id_Q" 
                     name="Q" 
                     class="input" 
                     placeholder="e.g., 1500.00 (monthly estimated items sold)"
@@ -90,14 +91,14 @@
                     step="1"
                     required
                 >
-                <span class="error-message" id="Q_error"></span>
+                <span class="error-message" id="id_Q_error"></span>
             </div>
 
             <div class="form-group">
                 <label for="g" class="label">Growth Rate Per Month</label>
                 <input 
                     type="number" 
-                    id="g" 
+                    id="id_g" 
                     name="g" 
                     class="input" 
                     placeholder="e.g., 2 (percentage growth rate per month)"
@@ -105,14 +106,14 @@
                     step="1"
                     required
                 >
-                <span class="error-message" id="g_error"></span>
+                <span class="error-message" id="id_g_error"></span>
             </div>
 
             <div class="form-group">
                 <label for="E_fix" class="label">Fixed costs</label>
                 <input 
                     type="number" 
-                    id="E_fix" 
+                    id="id_E_fix" 
                     name="E_fix" 
                     class="input" 
                     placeholder="e.g., 40000"
@@ -120,48 +121,45 @@
                     step="0.01"
                     required
                 >
-                <span class="error-message" id="E_fix_error"></span>
+                <span class="error-message" id="id_E_fix_error"></span>
             </div>
 
             <div class="form-group">
                 <label for="E_var" class="label">Variable costs</label>
                 <input 
                     type="number" 
-                    id="E_var" 
+                    id="id_E_var" 
                     name="E_var" 
                     class="input" 
                     placeholder="e.g., 50000"
                     required
                 >
-                <span class="error-message" id="E_var_error"></span>
-            </div>
-
-            <div class="form-group">
-                <label for="C_startup" class="label">Start up capital</label>
-                <input 
-                    type="number" 
-                    id="C_startup" 
-                    name="C_startup" 
-                    class="input" 
-                    placeholder="e.g., 45000"
-                    required
-                >
-                <span class="error-message" id="C_startup_error"></span>
+                <span class="error-message" id="id_E_var_error"></span>
             </div>
             
             <div class="form-group">
                 <label for="initial_inventory_units" class="label">Initial Inventory</label>
                 <input 
                     type="number" 
-                    id="initial_inventory_units" 
+                    id="id_initial_inventory_units" 
                     name="initial_inventory_units" 
                     class="input" 
                     placeholder="e.g., 200 units"
                     required
                 >
-                <span class="error-message" id="initial_inventory_units_error"></span>
+                <span class="error-message" id="id_initial_inventory_units_error"></span>
             </div>
-            
+
+            {% comment %} <div class="button">
+                <input
+                    type="submit"
+                    value="Run Reality Check"
+                    style="color:white;"
+                    id="submit-btn"
+                    disabled
+                >
+                <span class="spinner hidden"></span>
+            </div> {% endcomment %}
             <button type="submit" id="submit-btn" class="button" disabled>
                 <span class="button-text">Run Reality Check</span>
                 <span class="spinner hidden"></span>

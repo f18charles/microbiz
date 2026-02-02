@@ -31,7 +31,9 @@ def signup(request):
 
 def trials(request):
     """Render the main page."""
-    return render(request, 'trials.html')
+    form = RealityCheckForm()
+    
+    return render(request, 'trials.html', {'form': form})
 
 def test(request):
     """Render the main page."""
@@ -77,55 +79,6 @@ def analyze(request):
         location
         """
 
-
-
-        # # Validate required fields
-        # business_type = data.get('business_type', '').strip()
-        # location = data.get('location', '').strip()
-        
-        # capital = data.get('capital')
-        # # Accept either backend keys (fixed_costs/variable_costs) or older names (fixed_cost/variable_cost)
-        # _fixed = data.get('fixed_costs', data.get('fixed_cost', ''))
-        # if isinstance(_fixed, str):
-        #     fixed_costs = _fixed.strip()
-        # else:
-        #     fixed_costs = _fixed
-
-        # _variable = data.get('variable_costs', data.get('variable_cost', ''))
-        # if isinstance(_variable, str):
-        #     variable_costs = _variable.strip()
-        # else:
-        #     variable_costs = _variable
-        # monthly_sales_volume = data.get('monthly_sales_volume')
-        # _units = data.get('units', '')
-        # units = _units.strip() if isinstance(_units, str) else _units
-        # # Numeric/text fields: tolerate numbers or strings
-        # _cpu = data.get('cost_per_unit', '')
-        # cost_per_unit = _cpu.strip() if isinstance(_cpu, str) else _cpu
-
-        # _tsp = data.get('target_selling_price', '')
-        # target_selling_price = _tsp.strip() if isinstance(_tsp, str) else _tsp
-
-        # _expected = data.get('expected_sales_volume', '')
-        # expected_sales_volume = _expected.strip() if isinstance(_expected, str) else _expected
-
-        # _th = data.get('time_horizon', '6')
-        # time_horizon = _th.strip() if isinstance(_th, str) else _th
-
-        # errors = []
-        # if not business_type:
-        #     errors.append("Business type is required.")
-        # if not location:
-        #     errors.append("Location is required.")
-        # if not capital or float(capital) <= 0:
-        #     errors.append("Startup budget must be greater than zero.")
-        # if not monthly_sales_volume or float(monthly_sales_volume) <= 0:
-        #     errors.append("Expected monthly sales volume must be greater than zero.")
-
-        # if errors:
-        #     return JsonResponse({'success': False, 'errors': errors}, status=400)
-
-
         form = RealityCheckForm(data)
         
         if form.is_valid():
@@ -138,7 +91,6 @@ def analyze(request):
             expected_growth_rate = form.cleaned_data['g']
             fixed_costs = form.cleaned_data['E_fix']
             variable_costs = form.cleaned_data['E_var']
-            start_up_capital = form.cleaned_data['C_startup']  # Assuming startup costs as cost per unit for this context
             initial_inventory_units = form.cleaned_data['initial_inventory_units']  # Assuming expected sales volume is same as monthly sales volume
             
         else:
@@ -155,25 +107,18 @@ def analyze(request):
 
         # Prepare system and user prompts
         system_prompt = prompt_system
-#         system_prompt = """You are a business reality check advisor. Your role is to:
-# 1. Explain whether the business inputs appear realistic based on common business knowledge
-# 2. Highlight obvious risks or weak assumptions in the business idea
-# 3. Ask clarifying questions if information seems vague or incomplete
-# 4. Provide practical, grounded feedback
 
-# Important constraints:
-# - Do NOT calculate revenue, profit, or make financial predictions
-# - Do NOT give financial guarantees or specific numbers
-# - Do NOT provide investment advice
-# - Focus only on the realism and potential challenges of the inputs provided
-
-# Format:
-# - Start with a brief assessment of the overall realism
-# - List any concerns or risks you identify
-# - End with 2-3 clarifying questions if relevant
-# """
-
-        user_prompt = prompt_user(expected_growth_rate,business_type,location,capital,monthly_sales_volume,fixed_costs,variable_costs,start_up_capital,target_selling_price,initial_inventory_units,time_horizon,marketing_budget)
+        user_prompt = prompt_user(
+            expected_growth_rate,
+            business_type,
+            location,
+            capital,
+            time_horizon,
+            target_selling_price,
+            monthly_sales_volume,
+            fixed_costs,
+            variable_costs,
+            initial_inventory_units)
 
         # Call Groq API via your utility function
         ai_response_raw = get_groq_completion(

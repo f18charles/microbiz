@@ -65,8 +65,8 @@ industry multiple = varies by industry, market conditions
 def revenue(Q: float, P: float) -> float:
     return Q * P
 
-def total_costs(C_fixed: float, Q: float, C_variable: float, marketing_budget: float) -> float:
-    return C_fixed + (Q * C_variable) + marketing_budget
+def total_costs(C_fixed: float, Q: float, C_variable: float) -> float:
+    return C_fixed + (Q * C_variable)
 
 def gross_burn(total_costs: float) -> float:
     return total_costs
@@ -75,7 +75,7 @@ def net_burn(gross_burn: float, revenue: float) -> float:
     return gross_burn - revenue
 
 def runway(c_start: float, net_burn: float) -> Optional[float]:
-    if net_burn >= 0:
+    if net_burn <= 0:
         return None  # Infinite runway if not burning cash
     return c_start / abs(net_burn)
 
